@@ -1,0 +1,45 @@
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp' // Gradle 프로젝트를 이클립수가 이해할 수 있는 웹 프로젝트로 인식시키기 위해 eclipse 플러그인을 eclipse-wtp 플러그인으로 대체
+apply plugin: 'war' // Gradle 프로젝트를 이클립수가 이해할 수 있는 웹 프로젝트로 인식시키기 위해 war 플러그인 추가
+
+compileJava.options.encoding = 'UTF-8' // 소스파일의 인코딩 지정
+sourceCompatibility = 1.7 // 소스코드의 자바버전 지정
+version = '1.0'
+
+eclipse {
+	wtp {
+		facet {
+			facet name: 'jst.web', version: '3.0' // Servlet Spec Version 지정
+			facet name: 'jst.java', version: '1.7' // Java Version 지정
+		}
+	}
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                   'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile 'org.springframework:spring-context:4.2.5.RELEASE'
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
